@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Favicon HADA SI OTHMANE l'hachimi  -->
+  <link rel="shortcut icon" href="./static/images/logo2.png" type="image/png" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+ <!-- ======== Swiper Js ======= -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.css"
+    />
+
+  <!-- Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.0.8/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Custom StyleSheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+  <title>Shop Games Account</title>
+</head>
+
+<body>
+    <!-- Navigation -->
+  <nav class="nav">
+    <div class="wrapper container">
+      <div class="logo"><a href="">
+        <img src="./static/images/logo2.png" alt="">
+      </a>
+      </div>
+
+      
+
+      <div class="auth-buttons">
+        <a href="login.html" class="btn">Login</a>
+        <a href="signup.html" class="btn">Sign Up</a>
+      </div>
+
+
+
+      <ul class="nav-list">
+        <div class="top">
+          <label for="" class="btn close-btn"><i class="fas fa-times"></i></label>
+        </div>
+        
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li>
+          <a href="{{ url_for('product') }}" class="desktop-item">Shop <span><i class="fas fa-chevron-down"></i></span></a>
+          <input type="checkbox" id="showMega" />
+          <label for="showMega" class="mobile-item">Shop <span><i class="fas fa-chevron-down"></i></span></label>
+          <div class="mega-box">
+            <div class="content">
+              <div class="row">
+                <img src="./static/images/logo2.png" alt="" />
+              </div>
+              <div class="row">
+                <header>Shop Layout</header>
+                <ul class="mega-links">
+                  <li><a href="#">Action Games</a></li>
+                  <li><a href="#">Role-Playing Games</a></li>
+                  <li><a href="#">Sports and Racing Games</a></li>
+                  <li><a href="#">Battle Royale</a></li>
+                  <li><a href="#">Horror Games</a></li>
+                </ul>
+              </div>
+              
+              
+            </div>
+          </div>
+        </li>
+        
+        <li>
+          <a href="{{ url_for('login') }}" class="desktop-item">Sellers <span><i class="fas fa-chevron-down"></i></span></a>
+          <input type="checkbox" id="showdrop1" />
+          <label for="showdrop1" class="mobile-item">Vendors <span><i class="fas fa-chevron-down"></i></span></label>
+          <ul class="drop-menu1">
+            <li><a href="">Sell us your amazing account</a></li>
+            
+          </ul>
+        </li>
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('login') }}">Sign Up</a></li>
+
+        
+        <!-- icons -->
+        <li class="icons">
+          <a href="cart.html">
+            <span>
+            <img src="./static/images/shoppingBag.svg" alt="" />
+            <small class="count d-flex">0</small>
+          </span>
+          </a>
+          <span><img src="./static/images/search.svg" alt="" /></span>
+        </li>
+      </ul>
+      <label for="" class="btn open-btn"><i class="fas fa-bars"></i></label>
+    </div>
+  </nav>
+
+
+
+    
+
+
+
+
+    {% block content %}
+
+    {% endblock %}
+
+    
+
+    <!-- Footer -->
+ <footer id="footer" class="section footer">
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-center">
+          <h3>EXTRAS</h3>
+          <a href="#">Brands</a>
+          <a href="#">Gift Certificates</a>
+          <a href="#">Affiliate</a>
+          <a href="#">Specials</a>
+          <a href="#">Site Map</a>
+        </div>
+        <div class="footer-center">
+          <h3>INFORMATION</h3>
+          <a href="#">About Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Site Map</a>
+        </div>
+        <div class="footer-center">
+          <h3>MY ACCOUNT</h3>
+          <a href="#">My Account</a>
+          <a href="#">Order History</a>
+          <a href="#">Wish List</a>
+          <a href="#">Newsletter</a>
+          <a href="#">Returns</a>
+        </div>
+        <div class="footer-center">
+          <h3>CONTACT US</h3>
+          <div>
+            <span>
+              <i class="fas fa-map-marker-alt"></i>
+            </span>
+            42 Dream House, Dreammy street, 7131 Dreamville, USA
+          </div>
+          <div>
+            <span>
+              <i class="far fa-envelope"></i>
+            </span>
+            company@gmail.com
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-phone"></i>
+            </span>
+            456-456-4512
+          </div>
+          <div class="payment-methods">
+            <img src="./static/images/payment.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <!-- ======== SwiperJS ======= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.js"></script>
+  <!-- Custom Scripts -->
+  
+
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+  <script>
+    function setProductData(name, image, price) {
+      const productData = { name, image, price };
+      localStorage.setItem('productData', JSON.stringify(productData));
+    }
+  </script>
+
+
+</body>
+

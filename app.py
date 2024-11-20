@@ -85,7 +85,22 @@ def signup():
 
 
 
-
+@app.route('/signout')
+def dashboard():
+    if 'user_id' in session:
+        user_id = session['user_id']
+                
+        # Fetch user purchases and sales from MongoDB
+        purchases = db["purchases"].find({"user_id": user_id})
+        sales = db["sales"].find({"user_id": user_id})
+                
+        # Convert cursor to list
+        purchases_list = list(purchases)
+        sales_list = list(sales)
+                
+        return render_template('dashboard.html', purchases=purchases_list, sales=sales_list)
+    else:
+        return redirect(url_for('signin'))        
 
 
 @app.route('/authenticate', methods=['POST'])

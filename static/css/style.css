@@ -1,3 +1,64 @@
+.form-container {
+  max-width: 400px;
+  margin: 150px auto; /* Increased margin to avoid overlap with navbar */
+  padding: 20px;
+  background: #032f19f1;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #aea7a7;
+}
+
+.input-field {
+  margin-bottom: 15px;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+p {
+  text-align: center;
+  margin-top: 15px;
+}
+
+p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
 
 :root {
     --primary: #69ae14;

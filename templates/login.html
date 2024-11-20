@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+
+{% block content %}
+
 <head>
-  <meta charset="UTF-8">
+<body>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Face Authentication Login</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</head>
-<body>
   <div class="login-container">
     <h2>Login</h2>
     <form id="loginForm" action="{{ url_for('authenticate') }}" method="post" enctype="multipart/form-data">
-      <label for="name">Name</label>
+      <label for="name">Name</label>                                                                                                                                                                   
       <input type="text" id="name" name="name" required>
 
       <label for="email">Email</label>
@@ -31,4 +31,5 @@
     <p id="result"></p>
   </div>
 </body>
-</html>
+
+ {% endblock %}

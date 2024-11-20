@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from deepface import DeepFace
 import os
+import pymongo
 import cv2
+from werkzeug.security import generate_password_hash, check_password_hash
 import gridfs 
 
 from werkzeug.utils import secure_filename
@@ -31,6 +33,59 @@ def product():
 @app.route('/prudutsDetails')   
 def productsDetails():
     return render_template('productDetails.html')
+
+
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        if not email or not password:
+            flash('Email and password are required', 'error')
+            return redirect(url_for('signin'))
+
+        # Chercher l'utilisateur dans MongoDB
+        user = users_collection.find_one({"email": email})
+
+        if user and check_password_hash(user['password'], password):
+            # Stocker les informations utilisateur dans la session
+            session['user_id'] = str(user['_id'])  # Convertir l'ID MongoDB en chaîne
+            session['user_name'] = user['name']
+            flash(f"Welcome, {user['name']}!", 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid email or password', 'error')
+            return redirect(url_for('signin'))
+
+    return render_template('signin.html')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        
+        user = {
+            "name": name,
+            "email": email,
+            "password": hashed_password
+        }
+        
+        users_collection.insert_one(user)
+        flash('You have successfully signed up! Please log in.')
+        return redirect(url_for('signin'))
+    
+    return render_template('signup.html')
+
+
+
+
 
 
 @app.route('/authenticate', methods=['POST'])

@@ -1,0 +1,43 @@
+<!-- templates/signin.html -->
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+<div class="form-container">
+    <h2>Sign In</h2>
+    <form id="signInForm" method="POST" action="{{ url_for('signin') }}">
+        <div class="input-field">
+            <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="input-field">
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+    </form>
+</div>
+{% endblock %}
+{% block styles %}
+<style>
+    body {
+        background-image: url(/images/1.jpg);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-container {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+</style>

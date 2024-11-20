@@ -3,90 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <title>Dashboard</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Authentification réussie</h1>
-        <p>Veuillez remplir le formulaire ci-dessous pour nous contacter et nous donner des informations sur le compte de jeux que vous souhaitez vendre :</p>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Welcome, {{ session['user_name'] }}</h1>
+            <div class="buttons">
+                <button onclick="location.href='/buy'">Buy</button>
+                <button onclick="location.href='/sell'">Sell</button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="personal-info">
+                <h2>Personal Information</h2>
+                <ul>
+                    <li><strong>Name:</strong> {{ session['user_name'] }}</li>
+                    <li><strong>Email:</strong> {{ session['user_email'] }}</li>
+                </ul>
+            </div>
+            <div class="lists">
+                <div class="list">
+                    <h2>Purchases</h2>
+                    <ul>
+                        {% for item in purchases %}
+                        <li>{{ item.name }} - ${{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="list">
+                    <h2>Sales</h2>
+                    <ul>
+                        {% for item in sales %}
+                        <li>{{ item.name }} - ${{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-    <form action="/submit_form" method="post">
-        <label for="game_account">Nom de jeu :</label>
-        <input type="text" id="game_account" name="game_account" required><br><br>
-        <label for="message">Message :</label><br>
-        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
-        <label for="account_photos">Photos du compte :</label>
-        <input type="file" id="account_photos" name="account_photos" accept="image/*" multiple required><br><br>
-        <input type="submit" value="Envoyer">
-    </form>
 </body>
 </html>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
 
-        .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            color: #333;
-            margin-top: 0;
-        }
-
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        input[type="file"] {
-            margin-bottom: 20px;
-        }
-
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
     </style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .header h1 {
+        margin: 0;
+        color: #333;
+    }
+    
+    .buttons button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-left: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .buttons button:hover {
+        background-color: #45a049;
+    }
+    
+    .content {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .personal-info, .list {
+        flex: 1;
+        min-width: 300px;
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+        color: #333;
+        margin-top: 0;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    ul li {
+        padding: 5px 0;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    ul li:last-child {
+        border-bottom: none;
+    }
+    
+    ul li strong {
+        color: #555;
+    }
+    </style>    

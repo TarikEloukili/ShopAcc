@@ -19,7 +19,7 @@
   <!-- Custom StyleSheet -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   
-  <title>Shop Games Account</title>
+  <title>{% block title %}Shop Games Account{% endblock %}</title>
 </head>
 
 <body>
@@ -46,7 +46,7 @@
         </div>
         
         <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="products.html">Products</a></li>
+        <li><a href="{{ url_for('product')}}">Products</a></li>
         <li>
           <a href="{{ url_for('product') }}" class="desktop-item">Shop <span><i class="fas fa-chevron-down"></i></span></a>
           <input type="checkbox" id="showMega" />
@@ -81,8 +81,8 @@
             
           </ul>
         </li>
-        <li><a href="{{ url_for('login') }}">Login</a></li>
-        <li><a href="{{ url_for('login') }}">Sign Up</a></li>
+        <li><a href="{{ url_for('signin') }}">Login</a></li>
+        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
 
         
         <!-- icons -->
@@ -187,4 +187,4 @@
 
 
 </body>
-
+</html>

@@ -16,6 +16,18 @@ db = client["Flask"]  # Create or access the database
 users_collection = db["users"]  # Create or access the collection for users
 fs = gridfs.GridFS(db)  # Create a GridFS object for file storage
 
+
+UPLOAD_FOLDER = 'productsimages'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
+
+app = Flask(__name__)
+app.secret_key = 'votre_cle_secrete'  # Changez ceci pour une clé plus sécurisée
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 from graphviz import render
 import cv2
 
@@ -83,24 +95,54 @@ def signup():
     
     return render_template('signup.html')
 
+@app.route('/admin_product', methods=['GET', 'POST'])
+def admin_products():
+    if request.method == 'POST':
+        name = request.form['name']
+        genre = request.form['genre']
+        account_level = int(request.form['account_level'])
+        price = float(request.form['price'])
+        price_debatable = 'price_debatable' in request.form
+        photo = request.files['photo']
+        
+        if photo and allowed_file(photo.filename):
+            filename = secure_filename(photo.filename)
+            photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            photo.save(photo_path)
+        else:
+            photo_path = None
+        
+        product = {
+            "name": name,
+            "genre": genre,
+            "account_level": account_level,
+            "price": price,
+            "price_debatable": price_debatable,
+            "photo_path": photo_path
+        }
+        
+        db["products"].insert_one(product)
+        flash('Product added successfully!')
+        return redirect(url_for('admin_products'))
+    
+    products = db["products"].find()
+    return render_template('admin_products.html', products=products)
 
-
-@app.route('/signout')
+@app.route('/dashboard')
 def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
-                
         # Fetch user purchases and sales from MongoDB
-        purchases = db["purchases"].find({"user_id": user_id})
-        sales = db["sales"].find({"user_id": user_id})
-                
+        purchases = db["purchases"].find({"_id": pymongo.ObjectId(user_id)})
+        sales = db["sales"].find({"_id": pymongo.ObjectId(user_id)})
+        
         # Convert cursor to list
         purchases_list = list(purchases)
         sales_list = list(sales)
-                
+        
         return render_template('dashboard.html', purchases=purchases_list, sales=sales_list)
     else:
-        return redirect(url_for('signin'))        
+        return redirect(url_for('signin'))
 
 
 @app.route('/authenticate', methods=['POST'])
@@ -181,12 +223,7 @@ def authenticate():
         return str(e), 500
 
 
-@app.route('/dashboard')
-def dashboard():
-    if 'authenticated' in session:
-        return render_template('dashboard.html')
-    else:
-        return redirect(url_for('index'))
+  
 
 @app.route('/login')
 def login():

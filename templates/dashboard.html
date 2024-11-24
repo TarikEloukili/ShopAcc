@@ -1,130 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <title>Dashboard</title>
-</head>
-<body>
-    <div class="dashboard">
-        <div class="header">
-            <h1>Welcome, {{ session['user_name'] }}</h1>
-            <div class="buttons">
-                <button onclick="location.href='/buy'">Buy</button>
-                <button onclick="location.href='/sell'">Sell</button>
-            </div>
-        </div>
-        <div class="content">
-            <div class="personal-info">
-                <h2>Personal Information</h2>
-                <ul>
-                    <li><strong>Name:</strong> {{ session['user_name'] }}</li>
-                    <li><strong>Email:</strong> {{ session['user_email'] }}</li>
-                </ul>
-            </div>
-            <div class="lists">
-                <div class="list">
-                    <h2>Purchases</h2>
-                    <ul>
-                        {% for item in purchases %}
-                        <li>{{ item.name }} - ${{ item.price }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="list">
-                    <h2>Sales</h2>
-                    <ul>
-                        {% for item in sales %}
-                        <li>{{ item.name }} - ${{ item.price }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
 
-    </style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .dashboard {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background: white;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    
-    .header h1 {
-        margin: 0;
-        color: #333;
-    }
-    
-    .buttons button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        margin-left: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    
-    .buttons button:hover {
-        background-color: #45a049;
-    }
-    
-    .content {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    
-    .personal-info, .list {
-        flex: 1;
-        min-width: 300px;
-        background: #f9f9f9;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    h2 {
-        color: #333;
-        margin-top: 0;
-    }
-    
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    
-    ul li {
-        padding: 5px 0;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    ul li:last-child {
-        border-bottom: none;
-    }
-    
-    ul li strong {
-        color: #555;
-    }
-    </style>    
+{% block content %}
+<div class="dashboard-container">
+    <h2>Bienvenue, {{ session['user_name'] }}</h2>
+
+    <!-- Section des boutons -->
+    <div class="dashboard-buttons">
+        <a href="{{ url_for('buy') }}" class="btn btn-primary">Acheter</a>
+        <a href="{{ url_for('sell') }}" class="btn btn-secondary">Vendre</a>
+    </div>
+
+    <!-- Section des achats -->
+    <div class="dashboard-section">
+        <h3>Vos Achats</h3>
+        {% if purchases %}
+            <ul class="item-list">
+                {% for purchase in purchases %}
+                <li>
+                    <strong>Produit:</strong> {{ purchase['product_name'] }} <br>
+                    <strong>Prix:</strong> {{ purchase['price'] }}€ <br>
+                    <strong>Date:</strong> {{ purchase['date'].strftime('%d/%m/%Y') }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun achat trouvé.</p>
+        {% endif %}
+    </div>
+
+    <!-- Section des ventes -->
+    <div class="dashboard-section">
+        <h3>Vos Ventes</h3>
+        {% if sales %}
+            <ul class="item-list">
+                {% for sale in sales %}
+                <li>
+                    <strong>Produit:</strong> {{ sale['product_name'] }} <br>
+                    <strong>Prix:</strong> {{ sale['price'] }}€ <br>
+                    <strong>Date:</strong> {{ sale['date'].strftime('%d/%m/%Y') }}
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucune vente trouvée.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

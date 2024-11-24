@@ -1,0 +1,77 @@
+.dashboard-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.dashboard-container h2 {
+    text-align: center;
+    color: #333;
+}
+
+.dashboard-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.dashboard-buttons .btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-buttons .btn-primary {
+    background-color: #007bff;
+}
+
+.dashboard-buttons .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.dashboard-buttons .btn-secondary {
+    background-color: #28a745;
+}
+
+.dashboard-buttons .btn-secondary:hover {
+    background-color: #1e7e34;
+}
+
+.dashboard-section {
+    margin-bottom: 20px;
+}
+
+.dashboard-section h3 {
+    color: #555;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.item-list {
+    list-style: none;
+    padding: 0;
+}
+
+.item-list li {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.item-list li strong {
+    display: inline-block;
+    margin-bottom: 5px;
+}

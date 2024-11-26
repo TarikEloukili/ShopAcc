@@ -14,12 +14,12 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.css"
     />
 
-  <!-- Boxicons -->
+  
   <link href='https://unpkg.com/boxicons@2.0.8/css/boxicons.min.css' rel='stylesheet'>
-  <!-- Custom StyleSheet -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
   
   <title>{% block title %}Shop Games Account{% endblock %}</title>
 </head>
@@ -89,12 +89,7 @@
         
         <!-- icons -->
         <li class="icons">
-          <a href="cart.html">
-            <span>
-            <img src="./static/images/shoppingBag.svg" alt="" />
-            <small class="count d-flex">0</small>
-          </span>
-          </a>
+          
           <span><img src="./static/images/search.svg" alt="" /></span>
         </li>
       </ul>
@@ -178,8 +173,7 @@
   <!-- Custom Scripts -->
   
 
-  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+  
   <script>
     function setProductData(name, image, price) {
       const productData = { name, image, price };

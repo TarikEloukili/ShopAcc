@@ -75,6 +75,7 @@
                 {% else %}
                 <li><a href="{{ url_for('signin') }}" >Login</a></li>
                 <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                <li><a href="{{ url_for('contact') }}" >Contact us</a></li>
                 
                 {% endif %}
                 
@@ -113,7 +114,61 @@
 
     <!-- Footer -->
     {% block footer %}
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+      <div class="footer-content">
+          <!-- About Us Section -->
+          <div class="footer-section">
+              <h3>About Us</h3>
+              <p>Your trusted destination for premium gaming accounts. We ensure secure transactions and authentic game accounts for the best gaming experience.</p>
+          </div>
 
+          <!-- Social Media Section -->
+          <div class="footer-section">
+              <h3>Follow Us</h3>
+              <div class="social-links">
+                  <a href="#" class="social-link">
+                      <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="#" class="social-link">
+                      <i class="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" class="social-link">
+                      <i class="fab fa-instagram"></i>
+                  </a>
+                  <a href="#" class="social-link">
+                      <i class="fab fa-discord"></i>
+                  </a>
+              </div>
+          </div>
+
+          <!-- Security Section -->
+          <div class="footer-section">
+              <h3>Secure Shopping</h3>
+              <div class="security-badges">
+                  <img src="https://www.gstatic.com/images/icons/material/system/2x/security_grey600_24dp.png" alt="Google Safe Browsing" />
+                  <span>Google Safe Browsing</span>
+              </div>
+          </div>
+
+          <!-- Payment Methods Section -->
+          <div class="footer-section">
+              <h3>We Accept</h3>
+              <div class="payment-methods">
+                  <i class="fab fa-cc-paypal" title="PayPal"></i>
+                  <i class="fab fa-cc-visa" title="Visa"></i>
+                  <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+              </div>
+          </div>
+      </div>
+
+      <div class="footer-bottom">
+          <p>&copy; 2024 Game Store. All rights reserved.</p>
+      </div>
+  </div>
+</footer>
+</section>
     {% endblock %}
 
 

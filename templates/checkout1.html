@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Call of Duty Pro Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #818cf8;
+            --success-color: #22c55e;
+            --background-color: #f3f4f6;
+            --card-background: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+
+        .checkout-details, .order-summary {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--background-color);
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .product-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 0.5rem;
+            object-fit: cover;
+        }
+
+        .product-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .features-list i {
+            color: var(--success-color);
+        }
+
+        .price-tag {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .price-breakdown {
+            border-top: 1px solid #e5e7eb;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .total-row {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        #paypal-button-container {
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkout-details">
+            <h1>Checkout</h1>
+            <div class="product-card">
+                <img src="./static/productsimages/1.jpg" alt="Call of Duty Account" class="product-image">
+                <div class="product-info">
+                    <h3>Call of Duty Pro Account</h3>
+                    <ul class="features-list">
+                        <li><i class="fas fa-check-circle"></i> Prestige Level 10</li>
+                        <li><i class="fas fa-check-circle"></i> 500K+ COD Points</li>
+                        <li><i class="fas fa-check-circle"></i> Rare Weapons Collection</li>
+                        <li><i class="fas fa-check-circle"></i> Instant Account Transfer</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="secure-badge">
+                <i class="fas fa-lock"></i>
+                <span>Secure checkout powered by PayPal</span>
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="price-tag">$60.00</div>
+            <div class="price-breakdown">
+                <div class="price-row">
+                    <span>Subtotal</span>
+                    <span>$60.00</span>
+                </div>
+                <div class="price-row">
+                    <span>Processing Fee</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="price-row total-row">
+                    <span>Total</span>
+                    <span>$60.00</span>
+                </div>
+            </div>
+            <div id="paypal-button-container"></div>
+        </div>
+    </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency=USD"></script>
+    <script>
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'blue',
+                shape: 'rect',
+                label: 'paypal'
+            },
+            createOrder: function(data, actions) {
+                return fetch('/create-paypal-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        total: 60.00
+                    })
+                })
+                .then(response => response.json())
+                .then(orderData => orderData.id)
+                .catch(error => {
+                    console.error('Error creating PayPal order:', error);
+                    alert('There was an error processing your order. Please try again.');
+                });
+            },
+            
+            onApprove: function(data, actions) {
+                return fetch('/capture-paypal-order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderID: data.orderID
+                    })
+                })
+                .then(response => response.json())
+                .then(orderDetails => {
+                    const successMessage = document.createElement('div');
+                    successMessage.style.color = '#22c55e';
+                    successMessage.style.padding = '1rem';
+                    successMessage.style.marginTop = '1rem';
+                    successMessage.style.borderRadius = '0.5rem';
+                    successMessage.style.backgroundColor = '#f0fdf4';
+                    successMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        Payment successful! Order ID: ${orderDetails.id}
+                    `;
+                    document.querySelector('#paypal-button-container').after(successMessage);
+                })
+                .catch(error => {
+                    console.error('Error capturing PayPal order:', error);
+                    alert('There was an error processing your payment. Please contact support.');
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+</body>
+</html>

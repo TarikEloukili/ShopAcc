@@ -64,6 +64,8 @@ from bson import ObjectId
 
 from graphviz import render
 import cv2
+import re
+import requests
 
 
 
@@ -119,25 +121,56 @@ def signin():
     return render_template('signin.html')
 
 
+
+def is_valid_email(email):
+    # Basic regex for email validation
+    regex = r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if re.match(regex, email):
+        return True
+    return False
+
+def verify_email(email):
+    if not is_valid_email(email):
+        return False, "Invalid email format"
+        
+    # Use an email verification API (e.g., Hunter.io, EmailVerifierApp, etc.)
+    api_key = 'your_api_key'  # Replace with your actual API key
+    response = requests.get(f"https://api.emailverifierapp.com/v4/verify?email={email}&apikey={api_key}")
+        
+    if response.status_code == 200:
+        result = response.json()
+        if result['deliverable']:
+            return True, "Email is valid"
+        else:
+            return False, "Email is not deliverable"
+    else:
+        return False, "Error verifying email"
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
-        
+            
+        # Verify email
+        is_valid, message = verify_email(email)
+        if not is_valid:
+            flash(message, 'error')
+            return redirect(url_for('signup'))
+            
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        
+            
         user = {
             "name": name,
             "email": email,
             "password": hashed_password
         }
-        
+            
         users_collection.insert_one(user)
         flash('You have successfully signed up! Please log in.')
         return redirect(url_for('signin'))
-    
+        
     return render_template('signup.html')
 
 @app.route('/admin_product', methods=['GET', 'POST'])
@@ -286,6 +319,21 @@ def logout():
 def checkout():
     return render_template('checkout.html', 
                          paypal_client_id=PAYPAL_CLIENT_ID)
+
+@app.route('/checkout1')
+def checkout1():
+    return render_template('checkout1.html',paypal_client_id=PAYPAL_CLIENT_ID)
+
+@app.route('/checkout2')
+def checkout2():
+    return render_template('checkout2.html',paypal_client_id=PAYPAL_CLIENT_ID)
+
+@app.route('/checkout3')
+def checkout3():
+    return render_template('checkout3.html', paypal_client_id=PAYPAL_CLIENT_ID)                                               
+
+
+
 
 @app.route('/create-paypal-order', methods=['POST'])
 def create_paypal_order():

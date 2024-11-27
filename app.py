@@ -56,6 +56,7 @@ paypal_client = PayPalHttpClient(SandboxEnvironment(
 client = pymongo.MongoClient("mongodb://localhost:27017/")  # Adjust this to your MongoDB URI
 db = client["Flask"]  # Create or access the database
 users_collection = db["users"]  # Create or access the collection for users
+buyers_collection = db["sellers"]
 fs = gridfs.GridFS(db)  # Create a GridFS object for file storage
 chats_collection = db["chats"]
 
@@ -308,9 +309,9 @@ def authenticate():
                 "id_card_image_id": id_card_image_id
             }
             users_collection.insert_one(user_data)
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('index'))
         else:
-            return render_template('login.html', error="Les images ne correspondent pas")
+            return render_template('index.html', error="Les images ne correspondent pas")
 
     except Exception as e:
         return str(e), 500
@@ -320,7 +321,8 @@ def authenticate():
 
 @app.route('/login')
 def login():
-    print(session.get('user_id'))
+   
+
     return render_template('login.html')
    
 @app.route('/logout')

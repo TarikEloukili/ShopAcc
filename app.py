@@ -6,6 +6,13 @@ import cv2
 from werkzeug.security import generate_password_hash, check_password_hash
 import gridfs 
 
+
+from utils.email_service import EmailService
+from dotenv import load_dotenv
+import os
+
+
+
 from werkzeug.utils import secure_filename
 
 import pymongo  # Add MongoDB support
@@ -28,7 +35,11 @@ from datetime import datetime
 tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
 model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-base")
 
+load_dotenv()
 
+email_service = EmailService()
+
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'your-email@gmail.com')
 
 
 # PayPal Configuration
@@ -70,6 +81,43 @@ import cv2
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        subject = request.form.get('subject')
+        message = request.form.get('message')
+
+        # Format the email message
+        email_body = f"""
+        New contact form submission:
+        
+        From: {name} ({email})
+        Subject: {subject}
+        
+        Message:
+        {message}
+        """
+
+        # Send email
+        success, message = email_service.send_message(
+            sender=ADMIN_EMAIL,
+            to=ADMIN_EMAIL,
+            subject=f"Contact Form: {subject}",
+            message_text=email_body
+        )
+
+        if success:
+            flash('Your message has been sent successfully!', 'success')
+        else:
+            flash('There was an error sending your message. Please try again later.', 'error')
+        
+        return redirect(url_for('contact'))
+
+    return render_template('contact.html')
 
 @app.route('/product')
 def product():

@@ -1,43 +1,206 @@
 <!-- templates/signin.html -->
 {% extends 'base.html' %}
 
-
-
 {% block content %}
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
 <div class="form-container">
-    <h2>Sign In</h2>
+    <h3>Sign In</h3>
     <form id="signInForm" method="POST" action="{{ url_for('signin') }}">
-        <div class="input-field">
-            <input type="email" name="email" placeholder="Enter your email" required>
-        </div>
-        <div class="input-field">
-            <input type="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <button type="submit" class="btn">Sign In</button>
+        <label for="email">Email</label>
+        <input type="email" name="email" placeholder="Enter your email" required>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit">Sign In</button>
         <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
     </form>
 </div>
-{% endblock %}
-{% block styles %}
+
 <style>
-    body {
-        background-image: url(/images/1.jpg);
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100vh;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+    * {
+        padding: 0;
         margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #080710;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .background {
+        width: 430px;
+        height: 520px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+        z-index: -1;
+    }
+
+    .background .shape {
+        height: 200px;
+        width: 200px;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .background .shape:first-child {
+        background: linear-gradient(#1845ad, #23a2f6);
+        left: -80px;
+        top: -80px;
+    }
+
+    .background .shape:last-child {
+        background: linear-gradient(to right, #ff512f, #f09819);
+        right: -30px;
+        bottom: -80px;
     }
 
     .form-container {
-        background: rgba(255, 255, 255, 0.8);
-        padding: 20px;
+        height: 550px;
+        width: 450px;
+        background-color: rgba(255, 255, 255, 0.13);
+        position: relative;
         border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+        padding: 60px 40px;
+        z-index: 2;
+    }
+
+    .form-container * {
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
+        letter-spacing: 0.5px;
+        outline: none;
+        border: none;
+    }
+
+    .form-container h3 {
+        font-size: 34px;
+        font-weight: 500;
+        line-height: 44px;
+        text-align: center;
+    }
+
+    .form-container label {
+        display: block;
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .form-container input {
+        display: block;
+        height: 50px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.07);
+        border-radius: 3px;
+        padding: 0 10px;
+        margin-top: 8px;
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+    .form-container ::placeholder {
+        color: #e5e5e5;
+    }
+
+    .form-container button {
+        margin-top: 50px;
+        width: 100%;
+        background-color: #ffffff;
+        color: #080710;
+        padding: 15px 0;
+        font-size: 20px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .form-container p {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .form-container a {
+        color: #ffffff;
+        text-decoration: underline;
     }
 </style>
 {% endblock %}
-</style>
+
+{% block footer %}
+ <!-- Footer -->
+ <footer id="footer" class="section footer">
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-center">
+          <h3>EXTRAS</h3>
+          <a href="#">Brands</a>
+          <a href="#">Gift Certificates</a>
+          <a href="#">Affiliate</a>
+          <a href="#">Specials</a>
+          <a href="#">Site Map</a>
+        </div>
+        <div class="footer-center">
+          <h3>INFORMATION</h3>
+          <a href="#">About Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Contact Us</a>
+          <a href="#">Site Map</a>
+        </div>
+        <div class="footer-center">
+          <h3>MY ACCOUNT</h3>
+          <a href="#">My Account</a>
+          <a href="#">Order History</a>
+          <a href="#">Wish List</a>
+          <a href="#">Newsletter</a>
+          <a href="#">Returns</a>
+        </div>
+        <div class="footer-center">
+          <h3>CONTACT US</h3>
+          <div>
+            <span>
+              <i class="fas fa-map-marker-alt"></i>
+            </span>
+            42 Dream House, Dreammy street, 7131 Dreamville, USA
+          </div>
+          <div>
+            <span>
+              <i class="far fa-envelope"></i>
+            </span>
+            company@gmail.com
+          </div>
+          <div>
+            <span>
+              <i class="fas fa-phone"></i>
+            </span>
+            456-456-4512
+          </div>
+          <div class="payment-methods">
+            <img src="./static/images/payment.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+{% endblock %}

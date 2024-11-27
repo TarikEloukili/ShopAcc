@@ -74,9 +74,21 @@ def index():
 def product():
     return render_template('product.html')
 
-@app.route('/prudutsDetails')   
-def productsDetails():
+@app.route('/productDetails')   
+def productDetails():
     return render_template('productDetails.html')
+
+@app.route('/productDetails1')   
+def productDetails1():
+    return render_template('productDetails1.html')
+
+@app.route('/productDetails2')   
+def productDetails2():
+    return render_template('productDetails2.html')
+
+@app.route('/productDetails3')   
+def productDetails3():
+    return render_template('productDetails3.html')
 
 
 

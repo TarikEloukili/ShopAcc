@@ -14,15 +14,18 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.css"
     />
 
-  <!-- Boxicons -->
+  
   <link href='https://unpkg.com/boxicons@2.0.8/css/boxicons.min.css' rel='stylesheet'>
-  <!-- Custom StyleSheet -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+
+  
   <title>{% block title %}Shop Games Account{% endblock %}</title>
 </head>
+
 
 <body>
   <script src="{{ url_for('static', filename='script/chatbot.js') }}"></script>
@@ -51,28 +54,8 @@
         <li><a href="{{ url_for('index') }}">Home</a></li>
         <li><a href="{{ url_for('product')}}">Products</a></li>
         <li>
-          <a href="{{ url_for('product') }}" class="desktop-item">Shop <span><i class="fas fa-chevron-down"></i></span></a>
-          <input type="checkbox" id="showMega" />
-          <label for="showMega" class="mobile-item">Shop <span><i class="fas fa-chevron-down"></i></span></label>
-          <div class="mega-box">
-            <div class="content">
-              <div class="row">
-                <img src="./static/images/logo2.png" alt="" />
-              </div>
-              <div class="row">
-                <header>Shop Layout</header>
-                <ul class="mega-links">
-                  <li><a href="#">Action Games</a></li>
-                  <li><a href="#">Role-Playing Games</a></li>
-                  <li><a href="#">Sports and Racing Games</a></li>
-                  <li><a href="#">Battle Royale</a></li>
-                  <li><a href="#">Horror Games</a></li>
-                </ul>
-              </div>
-              
-              
-            </div>
-          </div>
+          <a href="{{ url_for('product') }}" class="desktop-item">Shop </a>
+             
         </li>
         
         <li>
@@ -90,12 +73,7 @@
         
         <!-- icons -->
         <li class="icons">
-          <a href="cart.html">
-            <span>
-            <img src="./static/images/shoppingBag.svg" alt="" />
-            <small class="count d-flex">0</small>
-          </span>
-          </a>
+          
           <span><img src="./static/images/search.svg" alt="" /></span>
         </li>
       </ul>
@@ -114,73 +92,25 @@
 
     {% endblock %}
 
-    
+
+
 
     <!-- Footer -->
- <footer id="footer" class="section footer">
-    <div class="container">
-      <div class="footer-container">
-        <div class="footer-center">
-          <h3>EXTRAS</h3>
-          <a href="#">Brands</a>
-          <a href="#">Gift Certificates</a>
-          <a href="#">Affiliate</a>
-          <a href="#">Specials</a>
-          <a href="#">Site Map</a>
-        </div>
-        <div class="footer-center">
-          <h3>INFORMATION</h3>
-          <a href="#">About Us</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms & Conditions</a>
-          <a href="#">Contact Us</a>
-          <a href="#">Site Map</a>
-        </div>
-        <div class="footer-center">
-          <h3>MY ACCOUNT</h3>
-          <a href="#">My Account</a>
-          <a href="#">Order History</a>
-          <a href="#">Wish List</a>
-          <a href="#">Newsletter</a>
-          <a href="#">Returns</a>
-        </div>
-        <div class="footer-center">
-          <h3>CONTACT US</h3>
-          <div>
-            <span>
-              <i class="fas fa-map-marker-alt"></i>
-            </span>
-            42 Dream House, Dreammy street, 7131 Dreamville, USA
-          </div>
-          <div>
-            <span>
-              <i class="far fa-envelope"></i>
-            </span>
-            company@gmail.com
-          </div>
-          <div>
-            <span>
-              <i class="fas fa-phone"></i>
-            </span>
-            456-456-4512
-          </div>
-          <div class="payment-methods">
-            <img src="./static/images/payment.png" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </footer>
-  <!-- End Footer -->
+    {% block footer %}
+
+    {% endblock %}
+
+
+    
+
+   
 
   <!-- ======== SwiperJS ======= -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.js"></script>
   <!-- Custom Scripts -->
   
 
-  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+  
   <script>
     function setProductData(name, image, price) {
       const productData = { name, image, price };

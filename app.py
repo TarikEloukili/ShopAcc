@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from deepface import DeepFace
 import os
 import pymongo
@@ -10,11 +10,44 @@ from werkzeug.utils import secure_filename
 
 import pymongo  # Add MongoDB support
 
+
+from paypalcheckoutsdk.core import PayPalHttpClient, SandboxEnvironment
+from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersCaptureRequest
+import paypalrestsdk
+
+
+import pandas as pd
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+
+
+from datetime import datetime
+
+
+# Load the Flan-T5 model
+tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
+model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-base")
+
+
+
+
+# PayPal Configuration
+PAYPAL_CLIENT_ID = 'ARHzz3f0k7fombqs4gtyth216HjO9J-K2lZ2kouhNLSTGFgIUEYi2lGVSxwz4UnFmVZeaIabyarHOPhg'
+PAYPAL_CLIENT_SECRET = 'EG1G5CyijIk6YgnpjyUd2C9da_89sUS2YrtzT6f7fCW9PCb6-6u930H6Mx0JB6p58IbktAng3VN31zoy'
+
+# Set up PayPal environment
+paypal_client = PayPalHttpClient(SandboxEnvironment(
+    client_id=PAYPAL_CLIENT_ID, 
+    client_secret=PAYPAL_CLIENT_SECRET
+))
+
 # MongoDB configuration
 client = pymongo.MongoClient("mongodb://localhost:27017/")  # Adjust this to your MongoDB URI
 db = client["Flask"]  # Create or access the database
 users_collection = db["users"]  # Create or access the collection for users
 fs = gridfs.GridFS(db)  # Create a GridFS object for file storage
+chats_collection = db["chats"]
+
 
 
 UPLOAD_FOLDER = 'productsimages'
@@ -31,8 +64,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 from graphviz import render
 import cv2
 
-app = Flask(__name__)
-app.secret_key = 'votre_cle_secrete'  # Changez ceci pour une clé plus sécurisée
+
 
 @app.route('/')
 def index():
@@ -229,6 +261,251 @@ def authenticate():
 def login():
     return render_template('login.html')
    
+
+@app.route('/checkout')
+def checkout():
+    return render_template('checkout.html', 
+                         paypal_client_id=PAYPAL_CLIENT_ID)
+
+@app.route('/create-paypal-order', methods=['POST'])
+def create_paypal_order():
+    try:
+        order_data = request.get_json()
+        total_price = order_data.get('total', 10.00)
+        
+        request_body = OrdersCreateRequest()
+        request_body.prefer('return=representation')
+        request_body.request_body({
+            "intent": "CAPTURE",
+            "purchase_units": [{
+                "amount": {
+                    "currency_code": "USD",
+                    "value": str(total_price)
+                }
+            }]
+        })
+        
+        response = paypal_client.execute(request_body)
+        return jsonify({
+            'id': response.result.id
+        })
+    except Exception as e:
+        print(f"Error creating order: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/capture-paypal-order', methods=['POST'])
+def capture_paypal_order():
+    try:
+        order_data = request.get_json()
+        order_id = order_data.get('orderID')
+        
+        if not order_id:
+            return jsonify({'error': 'Order ID is required'}), 400
+        
+        request_body = OrdersCaptureRequest(order_id)
+        response = paypal_client.execute(request_body)
+        
+        return jsonify({
+            'status': response.result.status,
+            'order_details': response.result.dict()
+        })
+    except Exception as e:
+        print(f"Error capturing order: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+
+# Load the Excel file
+file_path = "games.xlsx"
+try:
+    games_data = pd.read_excel(file_path)
+except Exception as e:
+    print(f"Error loading games.xlsx: {e}")
+    games_data = pd.DataFrame(columns=['game name', 'genre', 'Account lvl', 'price $', 'price debatable ?'])
+
+def format_game_data(df):
+    """Format game data for display"""
+    formatted_games = []
+    for _, row in df.iterrows():
+        game = {
+            "name": str(row['game name']),
+            "genre": str(row['genre']),
+            "level": str(row['Account lvl']),
+            "price": float(row['price $']),
+            "negotiable": bool(row['price debatable ?'])
+        }
+        formatted_games.append(game)
+    return formatted_games
+
+def handle_query(prompt, user_id=None):
+    """Handle chat queries about game accounts"""
+    prompt_lower = prompt.lower()
+    
+    # Greeting responses
+    greetings = ["hello", "hi", "hey", "greetings"]
+    if any(greet in prompt_lower for greet in greetings):
+        return {
+            "type": "text",
+            "content": "Welcome to our games store! How can I assist you today?"
+        }
+    
+    # Price-related keywords
+    price_keywords = ["below", "under", "less than", "more than", "above"]
+    
+    def extract_price(prompt):
+        for keyword in price_keywords:
+            if keyword in prompt.lower():
+                price_part = prompt.lower().split(keyword)[-1].strip().replace("$", "").strip()
+                try:
+                    return keyword, int(price_part)
+                except ValueError:
+                    return None, None
+        return None, None
+    
+    def find_matches(games_df, game_name=None, genre=None, price_op=None, price=None):
+        matches = games_df.copy()
+        if game_name:
+            matches = matches[matches['game name'].str.contains(game_name, case=False, na=False)]
+        if genre:
+            matches = matches[matches['genre'].str.contains(genre, case=False, na=False)]
+        if price_op and price is not None:
+            if price_op in ["below", "under", "less than"]:
+                matches = matches[matches['price $'] < price]
+            elif price_op in ["more than", "above"]:
+                matches = matches[matches['price $'] > price]
+        return matches
+
+    # Check for specific game or genre
+    response_data = None
+    message = ""
+
+    try:
+        # Game specific search
+        for game_name in games_data["game name"].unique():
+            if game_name.lower() in prompt_lower:
+                price_op, price = extract_price(prompt)
+                matching_games = find_matches(games_data, game_name=game_name, price_op=price_op, price=price)
+                if not matching_games.empty:
+                    message = f"Here are the available {game_name} accounts"
+                    if price_op and price:
+                        message += f" priced {price_op} ${price}"
+                    response_data = format_game_data(matching_games)
+                else:
+                    message = f"No {game_name} accounts found"
+                    if price_op and price:
+                        message += f" priced {price_op} ${price}"
+                break
+
+        # Genre search if no game found
+        if not response_data:
+            for genre in games_data["genre"].unique():
+                if genre.lower() in prompt_lower:
+                    price_op, price = extract_price(prompt)
+                    matching_games = find_matches(games_data, genre=genre, price_op=price_op, price=price)
+                    if not matching_games.empty:
+                        message = f"Here are the available {genre} accounts"
+                        if price_op and price:
+                            message += f" priced {price_op} ${price}"
+                        response_data = format_game_data(matching_games)
+                    else:
+                        message = f"No {genre} accounts found"
+                        if price_op and price:
+                            message += f" priced {price_op} ${price}"
+                    break
+
+        # General price query if no specific game or genre found
+        if not response_data:
+            price_op, price = extract_price(prompt)
+            if price_op and price is not None:
+                matching_games = find_matches(games_data, price_op=price_op, price=price)
+                if not matching_games.empty:
+                    message = f"Here are all accounts priced {price_op} ${price}"
+                    response_data = format_game_data(matching_games)
+                else:
+                    message = f"No accounts found priced {price_op} ${price}"
+
+        if response_data:
+            return {
+                "type": "game_data",
+                "message": message,
+                "content": response_data
+            }
+        
+        return {
+            "type": "text",
+            "content": "Sorry, I couldn't understand your query. Please ask about specific games, genres, or prices."
+        }
+    except Exception as e:
+        print(f"Error in handle_query: {e}")
+        return {
+            "type": "text",
+            "content": "Sorry, I encountered an error processing your request. Please try again."
+        }
+
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        user_message = data.get('message')
+        if not user_message:
+            return jsonify({'error': 'No message provided'}), 400
+
+        user_id = session.get('user_id')
+        
+        # Get username for the chat
+        username = 'Anonymous'
+        if user_id:
+            user = users_collection.find_one({"_id": user_id})
+            if user:
+                username = user.get('name', 'Anonymous')
+        else:
+            # Get the next available anonymous user number
+            try:
+                last_anon = chats_collection.find_one(
+                    {"username": {"$regex": "^user\\d+$"}},
+                    sort=[("username", -1)]
+                )
+                if last_anon:
+                    last_num = int(last_anon['username'].replace('user', ''))
+                    username = f"user{last_num + 1}"
+                else:
+                    username = "user1"
+            except Exception as e:
+                print(f"Error getting anonymous username: {e}")
+                username = "anonymous"
+
+        # Get chatbot response
+        response = handle_query(user_message, user_id)
+        
+        # Save conversation to MongoDB
+        try:
+            chat_entry = {
+                "username": username,
+                "user_id": user_id,
+                "message": user_message,
+                "response": response,
+                "timestamp": datetime.utcnow()
+            }
+            chats_collection.insert_one(chat_entry)
+        except Exception as e:
+            print(f"Error saving chat to MongoDB: {e}")
+
+        return jsonify({
+            'response': response,
+            'username': username
+        })
+    except Exception as e:
+        print(f"Chat error: {e}")
+        return jsonify({
+            'response': {
+                'type': 'text',
+                'content': 'Sorry, an error occurred. Please try again.'
+            }
+        }), 500
 
 
 

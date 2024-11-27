@@ -3,331 +3,200 @@
 {% block content %}
 <div class="hero">
   <div class="row">
-    <div class="swiper-container slider-1">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="./static/images/5.webp" alt="" />
-          <div class="content">
-              <h1 style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">
-              Get Your Dream Game Account
-              <br/>
-              starting from 
-              <span style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">$100</span>
-              </h1>
-            <p style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">Discover the best game accounts at unbeatable prices. Start your adventure today!</p>
+      <div class="swiper slider-1">
+          <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                  <img src="{{ url_for('static', filename='images/5.webp') }}" alt="Gaming Account" />
+                  <div class="content">
+                      <h1>Get Your Dream Game Account
+                          <br/>starting from 
+                          <span>$100</span>
+                      </h1>
+                      <p>Discover the best game accounts at unbeatable prices. Start your adventure today!</p>
+                      <a href="{{ url_for('product') }}">Shop Now</a>
+                  </div>
+              </div>
 
-            <a href="#">Shop Now</a>
+              <div class="swiper-slide">
+                  <img src="{{ url_for('static', filename='images/6.webp') }}" alt="Special Offer" />
+                  <div class="content">
+                      <h1>First Order Discount
+                          <br/><span>20% off</span>
+                          on all accounts
+                      </h1>
+                      <p>Join our community and get a special discount on your first purchase. Don't miss out!</p>
+                      <a href="{{ url_for('product') }}">Shop Now</a>
+                  </div>
+              </div>
+              
+              <div class="swiper-slide">
+                  <img src="{{ url_for('static', filename='images/7.webp') }}" alt="Premium Accounts" />
+                  <div class="content">
+                      <h1>Premium Game Accounts
+                          <br/><span>Verified Sellers</span>
+                      </h1>
+                      <p>All our accounts are verified and come with a guarantee. Shop with confidence!</p>
+                      <a href="{{ url_for('product') }}">Shop Now</a>
+                  </div>
+              </div>
           </div>
-        </div>
-
-        <div class="swiper-slide">
-          <img src="./static/images/5.webp" alt="hero image" />
-          <div class="content">
-            <h1 style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">First Order Discount
-              <br/>
-              <span style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">20% off</span>
-              on all accounts
-            </h1>
-            <p style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">Join our community and get a special discount on your first purchase. Don't miss out!</p>
-            <a href="#">Shop Now</a>
-          </div>
-        </div>
-        
-        <div class="swiper-slide">
-          <img src="./static/images/5.webp" alt="hero image" />
-          <div class="content">
-            <h1 style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">First Order Discount
-              <br/>
-              <span style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">20% off</span>
-              on all accounts
-            </h1 style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">
-            <p style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">Join our community and get a special discount on your first purchase. Don't miss out!</p>
-            <a href="#">Shop Now</a>
-          </div>
-        </div>
+          
+          <!-- Add pagination -->
+          <div class="swiper-pagination"></div>
       </div>
-    </div>
   </div>
 
   <!-- Carousel Navigation -->
   <div class="arrows d-flex">
       <div class="swiper-prev d-flex">
-        <i class="bx bx-chevrons-left swiper-icon"></i>
+          <i class="bx bx-chevrons-left swiper-icon"></i>
       </div>
       <div class="swiper-next d-flex">
-        <i class="bx bx-chevrons-right swiper-icon"></i>
+          <i class="bx bx-chevrons-right swiper-icon"></i>
       </div>
   </div>
 </div>
 
-<!-- Promotion -->
-
-<section class="section promotion">
-  <div class="title">
-    <h2>Hot Games</h2>
-    <span>Discover the hottest game accounts and elevate your gaming experience!</span>
-  </div>
-
-  <div class="promotion-layout container">
-    <div class="promotion-item">
-      <img src="./static/images/1.jpg" alt="" />
-      <div class="promotion-content">
-        <h3>JUICE</h3>
-        <a href="">SHOP NOW</a>
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='script/carousel.js') }}"></script>
+ <!-- Hot Games Section -->
+ <section class="section hot-games">
+  <div class="container">
+      <div class="section-header">
+          <h2>Hot Games</h2>
+          <p>Discover the hottest game accounts and elevate your gaming experience!</p>
       </div>
-    </div>
 
-    <div class="promotion-item">
-      <img src="./static/images/2.jpg" alt="" />
-      <div class="promotion-content">
-        <h3>MANGO</h3>
-        <a href="">SHOP NOW</a>
-      </div>
-    </div>
+      <div class="games-grid">
+          <div class="game-card">
+              <div class="game-image">
+                  <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Game 1" />
+                  <div class="game-overlay">
+                      <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
+                  </div>
+              </div>
+              <div class="game-info">
+                  <h3>FIFA 24</h3>
+                  <span class="game-price">From $150</span>
+              </div>
+          </div>
 
-    <div class="promotion-item">
-      <img src="./static/images/3.jpg" alt="" />
-      <div class="promotion-content">
-        <h3>GRAPES</h3>
-        <a href="">SHOP NOW</a>
-      </div>
-    </div>
+          <div class="game-card">
+              <div class="game-image">
+                  <img src="{{ url_for('static', filename='images/2.jpg') }}" alt="Game 2" />
+                  <div class="game-overlay">
+                      <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
+                  </div>
+              </div>
+              <div class="game-info">
+                  <h3>Call of Duty</h3>
+                  <span class="game-price">From $120</span>
+              </div>
+          </div>
 
-    <div class="promotion-item">
-      <img src="./static/images/4.jpg" alt="" />
-      <div class="promotion-content">
-        <h3>POTATOE</h3>
-        <a href="">SHOP NOW</a>
-      </div>
-    </div>
-
-    <div class="promotion-item">
-      <img src="./static/images/shadow1.jpeg" alt="" />
-      <div class="promotion-content">
-        <h3>ORANGE</h3>
-        <a href="">SHOP NOW</a>
-      </div>
-    </div>
-
-    <div class="promotion-item">
-      <img src="./static/images/fifa1.jpeg" alt="" />
-      <div class="promotion-content">
-        <h3>PINEAPPLE</h3>
-        <a href="">SHOP NOW</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Featured -->
-<section class="section featured"> 
-
-   <!-- Carousel Navigation -->
-  <div class="arrows d-flex">
-     <div class="custom-next d-flex">
-        <i class="bx bx-chevrons-right swiper-icon"></i>
-      </div>
-      <div class="custom-prev d-flex">
-        <i class="bx bx-chevrons-left swiper-icon"></i>
+          <!-- Add more game cards as needed -->
       </div>
   </div>
 </section>
 
-
-
-
-<!-- Products -->
+<!-- Featured Products Section -->
 <section class="section products">
-  <div class="title">
-    <h2>Have your prefer account</h2>
-    <span>Select from the premium product brands and save plenty money</span>
-  </div>
-
-  <div class="product-layout">
-    <div class="product">
-      <div class="img-container">
-
-        <a href="productDetails" onclick="setProductData('Bambi Print Mini Backpack', './static/images/1.jpg', '$150')">
-          <img src="./static/images/1.jpg" alt="Product Image" />
-        </a>
-
-        <div class="addCart">
-          <a href="productDetails.html"> <i class="fas fa-shopping-cart"></i></a>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
+  <div class="container">
+      <div class="section-header">
+          <h2>Premium Accounts</h2>
+          <p>Select from our premium accounts and save big</p>
       </div>
-      <div class="bottom">
 
-        <a href="productDetails.html" onclick="setProductData('Bambi Print Mini Backpack', './static/images/1.jpg', '$150')">
-          Bambi Print Mini Backpack
-        </a>
-        <div class="price">
-          <span>$150</span>
-        </div>
+      <div class="products-grid">
+          <div class="product-card">
+              <div class="product-image">
+                  <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product 1" />
+                  <div class="product-actions">
+                      <button class="action-btn"><i class="fas fa-heart"></i></button>
+                      <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                      <button class="action-btn"><i class="fas fa-search"></i></button>
+                  </div>
+              </div>
+              <div class="product-info">
+                  <h3>FIFA 24 Pro Account</h3>
+                  <div class="product-price">
+                      <span class="current-price">$150</span>
+                      <span class="original-price">$200</span>
+                  </div>
+                  <div class="product-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span>(4.5)</span>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Add more product cards as needed -->
       </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/un2.avif" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-        <div class="price">
-          <span>$150</span>
-          <span class="cancel">$160</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/mono1.webp" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-        <div class="price">
-          <span>$150</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/4.jpg" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-        <div class="price">
-          <span>$150</span>
-          <span class="cancel">$160</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/1.jpg" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-        <div class="price">
-          <span>$150</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/2.jpg" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-
-        <div class="price">
-          <span>$150</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/3.jpg" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-
-        <div class="price">
-          <span>$150</span>
-          <span class="cancel">$160</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-      <div class="img-container">
-        <img src="./static/images/un2.avif" alt="" />
-        <div class="addCart">
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-
-        <ul class="side-icons">
-          <span><i class="fas fa-search"></i></span>
-          <span><i class="far fa-heart"></i></span>
-          <span><i class="fas fa-sliders-h"></i></span>
-        </ul>
-      </div>
-      <div class="bottom">
-        <a href="">Bambi Print Mini Backpack</a>
-        <div class="price">
-          <span>$150</span>
-          <span class="cancel">$160</span>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
+<section>
+   <!-- Footer -->
+   <footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- About Us Section -->
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Your trusted destination for premium gaming accounts. We ensure secure transactions and authentic game accounts for the best gaming experience.</p>
+            </div>
 
-<!-- ADVERT -->
+            <!-- Social Media Section -->
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="footer-section">
+                <h3>Secure Shopping</h3>
+                <div class="security-badges">
+                    <img src="https://www.gstatic.com/images/icons/material/system/2x/security_grey600_24dp.png" alt="Google Safe Browsing" />
+                    <span>Google Safe Browsing</span>
+                </div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div class="footer-section">
+                <h3>We Accept</h3>
+                <div class="payment-methods">
+                    <i class="fab fa-cc-paypal" title="PayPal"></i>
+                    <i class="fab fa-cc-visa" title="Visa"></i>
+                    <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Game Store. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+</section>
+
 
 
 

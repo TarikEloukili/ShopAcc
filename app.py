@@ -57,9 +57,10 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
-app.secret_key = 'votre_cle_secrete'  # Changez ceci pour une clé plus sécurisée
+app.config['SECRET_KEY'] = 'your_secret_key' # Changez ceci pour une clé plus sécurisée
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+from bson import ObjectId
 
 from graphviz import render
 import cv2
@@ -177,8 +178,8 @@ def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
         # Fetch user purchases and sales from MongoDB
-        purchases = db["purchases"].find({"_id": pymongo.ObjectId(user_id)})
-        sales = db["sales"].find({"_id": pymongo.ObjectId(user_id)})
+        purchases = db["purchases"].find({"_id": ObjectId(user_id)})
+        sales = db["sales"].find({"_id": ObjectId(user_id)})
         
         # Convert cursor to list
         purchases_list = list(purchases)
@@ -271,8 +272,15 @@ def authenticate():
 
 @app.route('/login')
 def login():
+    print(session.get('user_id'))
     return render_template('login.html')
    
+@app.route('/logout')
+def logout():
+    # Clear the session
+    session.clear()
+    return render_template('logout.html')  # Render the logout page
+
 
 @app.route('/checkout')
 def checkout():

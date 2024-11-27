@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Favicon HADA SI OTHMANE l'hachimi  -->
-  <link rel="shortcut icon" href="./static/images/logo2.png" type="image/png" />
+  <link rel="shortcut icon" href="./static/images/ShopAcc.jpg" type="image/png" />
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
  <!-- ======== Swiper Js ======= -->
@@ -22,64 +22,80 @@
   <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
 
-  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/store.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
+
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+<!-- Box Icons -->
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carousel.css') }}">
+
   <title>{% block title %}Shop Games Account{% endblock %}</title>
 </head>
 
 
 <body>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='script/carousel.js') }}"></script>
+
+
   <script src="{{ url_for('static', filename='script/chatbot.js') }}"></script>
+
     <!-- Navigation -->
-  <nav class="nav">
-    <div class="wrapper container">
-      <div class="logo"><a href="">
-        <img src="./static/images/logo2.png" alt="">
-      </a>
-      </div>
+     
+   <nav class="nav">
+        <div class="wrapper container">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/ShopAcc.jpg') }}" alt="Shop Logo">
+                </a>
+            </div>
 
-      
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search games...">
+            </div>
 
-      <div class="auth-buttons">
-        <a href="login.html" class="btn">Login</a>
-        <a href="signup.html" class="btn">Sign Up</a>
-      </div>
+            <ul class="nav-list">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('product') }}">Products</a></li>
+                {% if session.get('user_id') %}
+                <li><a href="{{ url_for('logout') }}" >logout</a></li>
+                <li><a href="{{ url_for('dashboard') }}" >dashboard</a></li>
 
+                
+                {% else %}
+                <li><a href="{{ url_for('signin') }}" >Login</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                
+                {% endif %}
+                
+                <li>
+                    <a href="#" class="desktop-item">Sellers <i class="fas fa-chevron-down"></i></a>
+                    <ul class="drop-menu1">
+                        <li><a href="{{ url_for('login') }}">Become a Seller</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
 
-
-      <ul class="nav-list">
-        <div class="top">
-          <label for="" class="btn close-btn"><i class="fas fa-times"></i></label>
-        </div>
-        
-        <li><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="{{ url_for('product')}}">Products</a></li>
-        <li>
-          <a href="{{ url_for('product') }}" class="desktop-item">Shop </a>
-             
-        </li>
-        
-        <li>
-          <a href="{{ url_for('login') }}" class="desktop-item">Sellers <span><i class="fas fa-chevron-down"></i></span></a>
-          <input type="checkbox" id="showdrop1" />
-          <label for="showdrop1" class="mobile-item">Vendors <span><i class="fas fa-chevron-down"></i></span></label>
-          <ul class="drop-menu1">
-            <li><a href="">Sell us your amazing account</a></li>
             
-          </ul>
-        </li>
-        <li><a href="{{ url_for('signin') }}">Login</a></li>
-        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
 
-        
-        <!-- icons -->
-        <li class="icons">
-          
-          <span><img src="./static/images/search.svg" alt="" /></span>
-        </li>
-      </ul>
-      <label for="" class="btn open-btn"><i class="fas fa-bars"></i></label>
-    </div>
-  </nav>
+            <div class="mobile-menu">
+                <button class="btn open-btn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <script src="{{ url_for('static', filename='script/search.js') }}"></script>
 
 
 

@@ -5,15 +5,21 @@ import pymongo
 import cv2
 from werkzeug.security import generate_password_hash, check_password_hash
 import gridfs 
-
+from deepface import DeepFace
 
 from utils.email_service import EmailService
 from dotenv import load_dotenv
 import os
 
+from functools import wraps
 
 
 from werkzeug.utils import secure_filename
+
+
+from utils.face_verification import verify_identity
+
+
 
 import pymongo  # Add MongoDB support
 
@@ -29,6 +35,9 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 
 from datetime import datetime
+
+
+
 
 
 # Load the Flan-T5 model
@@ -162,7 +171,7 @@ def signin():
             session['user_id'] = str(user['_id'])  # Convertir l'ID MongoDB en chaîne
             session['user_name'] = user['name']
             flash(f"Welcome, {user['name']}!", 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('index'))
         else:
             flash('Invalid email or password', 'error')
             return redirect(url_for('signin'))
@@ -171,29 +180,7 @@ def signin():
 
 
 
-def is_valid_email(email):
-    # Basic regex for email validation
-    regex = r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    if re.match(regex, email):
-        return True
-    return False
 
-def verify_email(email):
-    if not is_valid_email(email):
-        return False, "Invalid email format"
-        
-    # Use an email verification API (e.g., Hunter.io, EmailVerifierApp, etc.)
-    api_key = 'your_api_key'  # Replace with your actual API key
-    response = requests.get(f"https://api.emailverifierapp.com/v4/verify?email={email}&apikey={api_key}")
-        
-    if response.status_code == 200:
-        result = response.json()
-        if result['deliverable']:
-            return True, "Email is valid"
-        else:
-            return False, "Email is not deliverable"
-    else:
-        return False, "Error verifying email"
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -201,26 +188,22 @@ def signup():
         name = request.form['name']
         email = request.form['email']
         password = request.form['password']
-            
-        # Verify email
-        is_valid, message = verify_email(email)
-        if not is_valid:
-            flash(message, 'error')
-            return redirect(url_for('signup'))
-            
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-            
         user = {
             "name": name,
             "email": email,
             "password": hashed_password
         }
-            
         users_collection.insert_one(user)
+
         flash('You have successfully signed up! Please log in.')
         return redirect(url_for('signin'))
         
     return render_template('signup.html')
+
+
+
+
 
 @app.route('/admin_product', methods=['GET', 'POST'])
 def admin_products():
@@ -269,92 +252,71 @@ def dashboard():
         
         return render_template('dashboard.html', purchases=purchases_list, sales=sales_list)
     else:
-        return redirect(url_for('signin'))
+        return redirect(url_for('verify'))
 
 
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
-    # Récupérer les données du formulaire
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
-    user_image = request.files['userImage']
-    id_card_image = request.files['idCardImage']
-
-    # Enregistrer les images dans GridFS
-    user_image_filename = secure_filename(user_image.filename)
-    id_card_image_filename = secure_filename(id_card_image.filename)
-
-    user_image_id = fs.put(user_image.read(), filename=user_image_filename)
-    id_card_image_id = fs.put(id_card_image.read(), filename=id_card_image_filename)
-
-    # Sauvegarder temporairement les images pour la vérification
-    user_image_path = os.path.join('uploads', 'user_image.jpg')
-    id_card_image_path = os.path.join('uploads', 'id_card_image.jpg')
-    
-    # Lire les images en utilisant OpenCV
-    with open(user_image_path, 'wb') as f:
-        f.write(fs.get(user_image_id).read())
-    
-    with open(id_card_image_path, 'wb') as f:
-        f.write(fs.get(id_card_image_id).read())
-
-    def extract_face(image_path):
-        # Charger l'image
-        image = cv2.imread(image_path)
-        if image is None:
-            raise Exception("Image introuvable ou illisible")
-        
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
-        # Détecter les visages
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-        if len(faces) > 0:
-            (x, y, w, h) = faces[0]
-            face = image[y:y+h, x:x+w]
-            face_path = os.path.join('uploads', 'extracted_face.jpg')
-            cv2.imwrite(face_path, face)
-            return face_path
-        else:
-            raise Exception("Aucun visage détecté dans l'image de la carte d'identité")
-
-    # Extraire le visage de la carte d'identité
-    extracted_face_path = extract_face(id_card_image_path)
-
     try:
-        # Comparer les images avec DeepFace
-        result = DeepFace.verify(user_image_path, extracted_face_path)
+        # Récupérer les données du formulaire
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        
 
-        # Supprimer les images après vérification
-        os.remove(user_image_path)
-        os.remove(id_card_image_path)
+        
 
-        if result['verified']:
-            session['authenticated'] = True
+   
 
+        
+
+        
             # Enregistrer les données de l'utilisateur dans MongoDB
-            user_data = {
+        buyer_data = {
                 "name": name,
                 "email": email,
                 "password": password,  # Note : hachez le mot de passe dans une vraie application
-                "user_image_id": user_image_id,
-                "id_card_image_id": id_card_image_id
+                
             }
-            users_collection.insert_one(user_data)
-            return redirect(url_for('index'))
-        else:
-            return render_template('index.html', error="Les images ne correspondent pas")
+        buyers_collection.insert_one(buyer_data)
+        return redirect(url_for('verify'))
+    
 
     except Exception as e:
+        
         return str(e), 500
-
 
   
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-   
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        if not email or not password or not name:
+            flash('Name, Email and password are required', 'error')
+            return redirect(url_for('login'))            
+        
+        # Chercher l'utilisateur dans MongoDB
+        # Chercher l'utilisateur dans MongoDB
+        user = users_collection.find_one({"email": email})
+
+        
+       
+        buyers_collection.insert_one(user)
+      
+
+        if user and check_password_hash(user['password'], password):
+            # Stocker les informations utilisateur dans la session
+            session['user_id'] = str(user['_id'])  # Convertir l'ID MongoDB en chaîne
+            session['user_name'] = user['name']
+            flash(f"Welcome, {user['name']}!", 'success')
+            return redirect(url_for('verify'))
+        else:
+            flash('Invalid email or password', 'error')
+            return redirect(url_for('login'))
 
     return render_template('login.html')
    
@@ -464,7 +426,7 @@ def handle_query(prompt, user_id=None):
     if any(greet in prompt_lower for greet in greetings):
         return {
             "type": "text",
-            "content": "Welcome to our games store! How can I assist you today?"
+            "content": "Welcome to ShopAcc! How can we assist you today?"
         }
     
     # Price-related keywords
@@ -551,13 +513,13 @@ def handle_query(prompt, user_id=None):
         
         return {
             "type": "text",
-            "content": "Sorry, I couldn't understand your query. Please ask about specific games, genres, or prices."
+            "content": "Sorry, we couldn't understand your query. Please ask about specific games, genres, or prices."
         }
     except Exception as e:
         print(f"Error in handle_query: {e}")
         return {
             "type": "text",
-            "content": "Sorry, I encountered an error processing your request. Please try again."
+            "content": "Sorry, we encountered an error processing your request. Please try again."
         }
 
 
@@ -625,10 +587,66 @@ def chat():
             }
         }), 500
 
+UPLOAD_FOLDER = 'temp'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/verify', methods=['GET', 'POST'])
+def verify():
+    if request.method == 'POST':
+        if 'selfie' not in request.files or 'id_card' not in request.files:
+            flash('Both selfie and ID card are required', 'error')
+            return redirect(request.url)
+
+        selfie = request.files['selfie']
+        id_card = request.files['id_card']
+
+        if selfie.filename == '' or id_card.filename == '':
+            flash('No selected files', 'error')
+            return redirect(request.url)
+
+        if selfie and id_card and allowed_file(selfie.filename) and allowed_file(id_card.filename):
+            # Create temp directory if it doesn't exist
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+            # Save uploaded files
+            selfie_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(selfie.filename))
+            id_card_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(id_card.filename))
+            
+            selfie.save(selfie_path)
+            id_card.save(id_card_path)
+
+            try:
+                # Verify identity
+                result = verify_identity(selfie_path, id_card_path)
+
+                # Clean up uploaded files
+                os.remove(selfie_path)
+                os.remove(id_card_path)
+
+                if result['verified']:
+                    flash('Identity verified successfully!', 'success')
+                    return render_template(('dashboard.html'))
+                else:
+                    flash("The image doesn't match the one on the Id_Card ", 'error')
+                    return render_template('verify.html')
+
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'error')
+                return render_template('verify.html')
+
+    return render_template('verify.html')
 
 
 if __name__ == '__main__':
     if not os.path.exists('uploads'):
         os.makedirs('uploads')
+    if not os.path.exists(os.path.join(app.root_path, 'temp')):
+        os.makedirs(os.path.join(app.root_path, 'temp'))
     app.run(debug=True)
     

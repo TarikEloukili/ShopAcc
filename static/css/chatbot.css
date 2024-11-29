@@ -9,7 +9,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: rgb(10, 206, 0);
+    background-color: #4f46e5;
     color: white;
     border: none;
     cursor: pointer;
@@ -48,7 +48,7 @@
   
   .chat-header {
     padding: 16px;
-    background-color: rgb(10, 206, 0);
+    background-color: #4f46e5;
     color: white;
     border-radius: 12px 12px 0 0;
     display: flex;
@@ -96,7 +96,7 @@
   }
   
   .message.user .message-content {
-    background-color: rgb(10, 206, 0);
+    background-color: #4f46e5;
     color: white;
     border-radius: 14px 14px 0 14px;
   }
@@ -143,7 +143,7 @@
   }
   
   .game-item-value {
-    color: rgb(6, 126, 0);
+    color: #4f46e5;
   }
   
   .chat-input {
@@ -166,8 +166,8 @@
   }
   
   .message-input:focus {
-    border-color: rgb(10, 206, 0);
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(0, 81, 255, 0.1);
   }
   
   .send-button {

@@ -2,65 +2,76 @@
 
 {% block content %}
 <div class="hero">
-  <div class="row">
-      <div class="swiper slider-1">
-          <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                  <img src="{{ url_for('static', filename='images/5.webp') }}" alt="Gaming Account" />
-                  <div class="content">
-                      <h1>Get Your Dream Game Account
-                          <br/>starting from 
-                          <span>$100</span>
-                      </h1>
-                      <p>Discover the best game accounts at unbeatable prices. Start your adventure today!</p>
-                      <a href="{{ url_for('product') }}">Shop Now</a>
-                  </div>
-              </div>
-
-              <div class="swiper-slide">
-                  <img src="{{ url_for('static', filename='images/6.webp') }}" alt="Special Offer" />
-                  <div class="content">
-                      <h1>First Order Discount
-                          <br/><span>20% off</span>
-                          on all accounts
-                      </h1>
-                      <p>Join our community and get a special discount on your first purchase. Don't miss out!</p>
-                      <a href="{{ url_for('product') }}">Shop Now</a>
-                  </div>
-              </div>
-              
-              <div class="swiper-slide">
-                  <img src="{{ url_for('static', filename='images/7.webp') }}" alt="Premium Accounts" />
-                  <div class="content">
-                      <h1>Premium Game Accounts
-                          <br/><span>Verified Sellers</span>
-                      </h1>
-                      <p>All our accounts are verified and come with a guarantee. Shop with confidence!</p>
-                      <a href="{{ url_for('product') }}">Shop Now</a>
-                  </div>
-              </div>
-          </div>
-          
-          <!-- Add pagination -->
-          <div class="swiper-pagination"></div>
-      </div>
+    <div class="row">
+        <div class="swiper slider-1">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="image-overlay">
+                        <img src="{{ url_for('static', filename='images/B1.jpg') }}" alt="Gaming Account" />
+                        <div class="dark-overlay"></div>
+                    </div>
+                    <div class="content">
+                        <h1>Get Your Dream Game Account
+                            <br/>starting from 
+                            <span>$20</span>
+                        </h1>
+                        <p>Discover the best game accounts at unbeatable prices. Start your adventure today!</p>
+                        <a href="{{ url_for('product') }}">Shop Now</a>
+                    </div>
+                </div>
+  
+                <div class="swiper-slide">
+                    <div class="image-overlay">
+                        <img src="{{ url_for('static', filename='images/B2.jpg') }}" alt="Special Offer" />
+                        <div class="dark-overlay"></div>
+                    </div>
+                    <div class="content">
+                        <h1>First Order Discount
+                            <br/><span>20% off</span>
+                            on all accounts
+                        </h1>
+                        <p>Join our community and get a special discount on your first purchase. Don't miss out!</p>
+                        <a href="{{ url_for('product') }}">Shop Now</a>
+                    </div>
+                </div>
+                
+                <div class="swiper-slide">
+                    <div class="image-overlay">
+                        <img src="{{ url_for('static', filename='images/B3.jpg') }}" alt="Premium Accounts" />
+                        <div class="dark-overlay"></div>
+                    </div>
+                    <div class="content">
+                        <h1>Premium Game Accounts
+                            <br/><span>Verified Sellers</span>
+                        </h1>
+                        <p>All our accounts are verified and come with a guarantee. Shop with confidence!</p>
+                        <a href="{{ url_for('product') }}">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
   </div>
+  
+  
 
   <!-- Carousel Navigation -->
-  <div class="arrows d-flex">
-      <div class="swiper-prev d-flex">
-          <i class="bx bx-chevrons-left swiper-icon"></i>
-      </div>
-      <div class="swiper-next d-flex">
-          <i class="bx bx-chevrons-right swiper-icon"></i>
-      </div>
-  </div>
+  <div class="arrows d-flex" style="color: #4f46e5;">
+    <div class="swiper-prev d-flex" style="color: #4f46e5;">
+        <i class="bx bx-chevrons-left swiper-icon" ></i>
+    </div>
+    <div class="swiper-next d-flex" style="color: #4f46e5;">
+        <i class="bx bx-chevrons-right swiper-icon" ></i>
+    </div>
 </div>
-
 <!-- Swiper JS -->
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 <!-- Custom JS -->
 <script src="{{ url_for('static', filename='script/carousel.js') }}"></script>
+
  <!-- Hot Games Section -->
  <section class="section hot-games">
   <div class="container">
@@ -72,30 +83,89 @@
       <div class="games-grid">
           <div class="game-card">
               <div class="game-image">
-                  <a href="productDetails">
-                  <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Game 1" />
-                    </a>
+                <img src="{{ url_for('static', filename='images/00.jpg') }}" alt="Game 1" />
+                <div class="game-overlay">
+                    <a href="{{ url_for('productDetails') }}" class="btn-shop">Shop Now</a>
+                </div>
                   
               </div>
               <div class="game-info">
                   <h3>FIFA 24</h3>
-                  <span class="game-price">From $150</span>
+                  <span class="game-price">From $50</span>
               </div>
           </div>
 
           <div class="game-card">
               <div class="game-image">
-                  <img src="{{ url_for('static', filename='images/2.jpg') }}" alt="Game 2" />
+                  <img src="{{ url_for('static', filename='images/11.webp') }}" alt="Game 2" />
                   <div class="game-overlay">
                       <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
                   </div>
               </div>
               <div class="game-info">
                   <h3>Call of Duty</h3>
-                  <span class="game-price">From $120</span>
+                  <span class="game-price">From $20</span>
               </div>
           </div>
 
+
+          <div class="game-card">
+            <div class="game-image">
+                <img src="{{ url_for('static', filename='images/22.png') }}" alt="Game 2" />
+                <div class="game-overlay">
+                    <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
+                </div>
+            </div>
+            <div class="game-info">
+                <h3>Counter-Strike: Global Offensive</h3>
+                <span class="game-price">From $55</span>
+            </div>
+        </div>
+
+
+
+        <div class="game-card">
+            <div class="game-image">
+                <img src="{{ url_for('static', filename='images/33.jpg') }}" alt="Game 2" />
+                <div class="game-overlay">
+                    <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
+                </div>
+            </div>
+            <div class="game-info">
+                <h3>Resident Evil 4</h3>
+                <span class="game-price">From $99</span>
+            </div>
+        </div>
+
+
+
+        <div class="game-card">
+            <div class="game-image">
+                <img src="{{ url_for('static', filename='images/44.jpg') }}" alt="Game 2" />
+                <div class="game-overlay">
+                    <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
+                </div>
+            </div>
+            <div class="game-info">
+                <h3>The Witcher 3</h3>
+                <span class="game-price">From $150</span>
+            </div>
+        </div>
+
+
+
+        <div class="game-card">
+            <div class="game-image">
+                <img src="{{ url_for('static', filename='images/55.webp') }}" alt="Game 2" />
+                <div class="game-overlay">
+                    <a href="{{ url_for('product') }}" class="btn-shop">Shop Now</a>
+                </div>
+            </div>
+            <div class="game-info">
+                <h3>Red Dead Redemption 2</h3>
+                <span class="game-price">From $40</span>
+            </div>
+        </div>
           <!-- Add more game cards as needed -->
       </div>
   </div>
@@ -112,7 +182,7 @@
       <div class="products-grid">
           <div class="product-card">
               <div class="product-image">
-                  <img src="{{ url_for('static', filename='images/1.jpg') }}" alt="Product 1" />
+                  <img src="{{ url_for('static', filename='images/00.jpg') }}" alt="Product 1" />
                   <div class="product-actions">
                       <button class="action-btn"><i class="fas fa-heart"></i></button>
                       <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
@@ -136,6 +206,38 @@
               </div>
           </div>
 
+
+          
+
+
+
+
+            <div class="products-grid">
+          <div class="product-card">
+              <div class="product-image">
+                  <img src="{{ url_for('static', filename='images/77.jpg') }}" alt="Product 1" />
+                  <div class="product-actions">
+                      <button class="action-btn"><i class="fas fa-heart"></i></button>
+                      <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                      <button class="action-btn"><i class="fas fa-search"></i></button>
+                  </div>
+              </div>
+              <div class="product-info">
+                  <h3>Valorant Gold Account</h3>
+                  <div class="product-price">
+                      <span class="current-price">$200</span>
+                      <span class="original-price">$300</span>
+                  </div>
+                  <div class="product-rating">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                     
+                      <span>(4.5)</span>
+                  </div>
+              </div>
+          </div>
           <!-- Add more product cards as needed -->
       </div>
   </div>

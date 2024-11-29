@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verify.css') }}">
+</head>
+<body>
+    <div class="verification-container">
+        <div class="verification-card">
+            <h1><i class="fas fa-user-shield"></i> Identity Verification</h1>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('verify') }}" method="POST" enctype="multipart/form-data" id="verificationForm">
+                <div class="upload-section">
+                    <div class="upload-box" id="selfieBox">
+                        <i class="fas fa-camera"></i>
+                        <h3>Upload Selfie</h3>
+                        <p>Click or drag and drop your selfie here</p>
+                        <input type="file" name="selfie" id="selfie" accept="image/*" required>
+                        <div class="preview" id="selfiePreview"></div>
+                    </div>
+
+                    <div class="upload-box" id="idCardBox">
+                        <i class="fas fa-id-card"></i>
+                        <h3>Upload ID Card</h3>
+                        <p>Click or drag and drop your ID card photo here</p>
+                        <input type="file" name="id_card" id="idCard" accept="image/*" required>
+                        <div class="preview" id="idCardPreview"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="verify-btn">
+                    <i class="fas fa-shield-alt"></i> Verify Identity
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // File input change handlers
+        document.getElementById('selfie').addEventListener('change', function() {
+            previewImage(this, 'selfiePreview');
+        });
+
+        document.getElementById('idCard').addEventListener('change', function() {
+            previewImage(this, 'idCardPreview');
+        });
+
+        // Make upload boxes clickable
+        document.getElementById('selfieBox').addEventListener('click', function() {
+            document.getElementById('selfie').click();
+        });
+
+        document.getElementById('idCardBox').addEventListener('click', function() {
+            document.getElementById('idCard').click();
+        });
+
+        // Form validation
+        document.getElementById('verificationForm').addEventListener('submit', function(e) {
+            const selfie = document.getElementById('selfie');
+            const idCard = document.getElementById('idCard');
+            
+            if (!selfie.files.length || !idCard.files.length) {
+                e.preventDefault();
+                alert('Please upload both a selfie and an ID card photo.');
+            }
+        });
+    </script>
+</body>
+</html>
